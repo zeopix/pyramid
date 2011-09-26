@@ -38,7 +38,7 @@
 
                             if(clickingRow == obj[0])
                             {
-                                if (clickingCol >= obj[1] && clickingCol <= obj[2])
+                                if (clickingCol <= obj[1] && clickingCol >= obj[2])
                                 {
                                     val = false;
                                     clickingCol = null;
@@ -54,6 +54,7 @@
                     }
 
                     if(val){
+                        
                     $(this).parent().find('.stick').each(function(){
                       $(this).css("background-color","#333");  
                       $(this).click(function(){
@@ -101,10 +102,11 @@
                     
                     $(this).css('background-color','red');
 
+                    }
                     clicking = "yes";
                     //alert("x: " + e.pageX)
+                    val = true;
 
-                    }
                 
                 });
             
