@@ -6,16 +6,54 @@
         <script src="js/jquery.js" language="javascript"></script>
         <script>
          $(function(){
-                var clickingRow = 0;
-                var clickingCol = 0;
+                var clickingRow = null;
+                var clickingCol = null;
+                //selectedBuble coleccion de objetos de la forma obj = array()
+                //obj[0] = row
+                //objj[1] =minCol
+                //obj[2] = maxCol
+                var selectedBuble = new Array();
+                var val = true;
+
                 $(".stick").click(function(e){
-                    clickingRow = $(this).parent().attr("order");
-                    
-                    clickingCol = $(this).index();
-                    
+                    //primero pinto todas las filas que tengo
+
+
+                    if(clickingCol == null && clickingRow == null){
+                        clickingRow = $(this).parent().attr("order");
+
+                        clickingCol = $(this).index();
+                    }
                     //alert("Col: "+clickingCol)
-                    
-                    $(".stick").css('background-color','#AAA');
+                    if(selectedBuble.length > 0)
+                    {
+                        for(i = 0; i <= selectedBuble.length; i++)
+                        {
+                            var obj = selectedBuble[i];
+
+                            //alert("row: " + obj[0] + " colmin: "+ obj[1] + " colmax; "+ obj[2]);
+                            for(i = obj[1]; i<=obj[2]; i++){
+                                  $(".row[order="+obj[0]+"]").find(':eq('+i+')').css('background-color',"blue");
+                             }
+
+                            if(clickingRow == obj[0])
+                            {
+                                if (clickingCol >= obj[1] && clickingCol <= obj[2])
+                                {
+                                    val = false;
+                                    clickingCol = null;
+                                    clickingRow = null;
+                                    alert("ya seleccionado");
+
+                                }
+                            }
+
+                        }
+                    }else{
+                        $(".stick").css('background-color','#AAA');
+                    }
+
+                    if(val){
                     $(this).parent().find('.stick').each(function(){
                       $(this).css("background-color","#333");  
                       $(this).click(function(){
@@ -24,24 +62,36 @@
                           
                           if(currentRow == clickingRow){
                               
-                              clickingCol //3
-                              currentCol //4 //1
+
+                              //alert(clickingCol + " | "+ currentCol)
                               if(clickingCol > currentCol){
                                   
-                                  var min = currentCol-2;
-                                  var max = clickingCol+1;
+                                  var min = currentCol;
+                                  var max = clickingCol;
                               }else{
-                                  var min = clickingCol-2;
-                                  var max = currentCol+1;
+                                  var min = clickingCol;
+                                  var max = currentCol;
                               }
-                              alert("MIN: " +min + "MAX:" +max);
-                              for(i = min; i<max; i++){
+                              //alert("MIN: " +min + "MAX:" +max);
+                              for(i = min; i<=max; i++){
                                   $(".row[order="+currentRow+"]").find(':eq('+i+')').css('background-color',"blue");
                               }
+                              /*
                               $(".row[order="+currentRow+"]").find(".stick:gr("+min+"):lt("+max+")").each(function(){
                                     $(this).css("background-color","blue");
                                 
                               });
+                              */
+
+                              var objBuble = new Array();
+                              objBuble[0] = currentRow;
+                              objBuble[1] = min;
+                              objBuble[2] = max;
+
+                              selectedBuble.push(objBuble);
+                              
+                              clickingCol = null;
+                              clickingRow = null;
                               
                           };
                           
@@ -53,6 +103,8 @@
 
                     clicking = "yes";
                     //alert("x: " + e.pageX)
+
+                    }
                 
                 });
             
